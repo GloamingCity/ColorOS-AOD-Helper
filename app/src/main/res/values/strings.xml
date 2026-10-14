@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ColorOS AOD Helper</string>
+    <string name="xposed_description">本项目基于“ColorOS AOD增强”与“别他妈亮了”二次开发，适当删减了部分功能。本模块仅有全景息屏解锁全天常亮显示与全景息屏双击亮屏这两项功能，向两位原作者致敬。使用该模块时，于lsposed中勾选推荐作用域，并重启相应作用域即可。</string>
+</resources>
