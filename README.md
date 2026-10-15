@@ -5,13 +5,13 @@
 </p>
 
 <p align="center">
-  <b>ColorOS 15 / 16 / 17 全景息屏全天常亮增强与双击防误唤醒纯净 LSPosed 模块</b>
+  <b>ColorOS 全景息屏全天常亮增强与双击防误唤醒纯净 LSPosed 模块</b>
 </p>
 
 <p align="center">
   <a href="https://github.com/GloamingCity/ColorOS-AOD-Helper/releases"><img src="https://img.shields.io/github/v/release/GloamingCity/ColorOS-AOD-Helper?color=00F5A0&label=Release" alt="Release"></a>
-  <img src="https://img.shields.io/badge/Platform-Android%2013%2B%20%7C%20ColorOS%2015--17-007AFF" alt="Platform">
-  <img src="https://img.shields.io/badge/Framework-LSPosed%20(Legacy)-00E5FF" alt="LSPosed">
+  <img src="https://img.shields.io/badge/Platform-Android%2014%2B%20%7C%20ColorOS%2017-007AFF" alt="Platform">
+  <img src="https://img.shields.io/badge/Framework-LSPosed-00E5FF" alt="LSPosed">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="License"></a>
 </p>
 
@@ -19,9 +19,18 @@
 
 ## 📖 项目简介 (Introduction)
 
-**ColorOS AOD Helper** 是一款专为 OPPO / 一加 (OnePlus) / 真我 (Realme) 系列机型（深度适配 ColorOS 15、ColorOS 16 及最新的 **ColorOS 17** 新架构）打造的息屏增强 Xposed 模块。
+**ColorOS AOD Helper** 是一款专为 OPPO / 一加 (OnePlus) / 真我 (Realme) 系列机型打造的息屏增强 Xposed 模块。
 
-针对新版 ColorOS 对“全景息屏”（壁纸息屏）在常亮时长及息屏手势上的限制，本模块重构了息屏调度链路，在保证系统绝对稳定、零额外功耗的前提下，实现全天常亮与精准的手势跟随体验。
+针对系统对“全景息屏”（壁纸息屏）在常亮时长及息屏手势上的限制，本模块重构了息屏调度链路，在保证系统绝对稳定、零额外功耗的前提下，实现全天常亮与精准的手势跟随体验。
+
+### 📱 兼容性与真机实测说明 (Compatibility)
+
+* **真机实测通过设备**：
+  * **OPPO Find X9 Ultra**（ColorOS 17）
+  * **OPPO Pad mini**（ColorOS 17）
+* **关于 ColorOS 15 与 16**：
+  * 作者仅在上述运行 ColorOS 17 的设备上进行了完整测试与验证；
+  * 从底层接口与方法签名来看，息屏显示（`com.oplus.aod`）和系统界面（`com.android.systemui`）的核心逻辑具有高度延续性，**理论上支持 ColorOS 15 与 ColorOS 16**，持有相关设备的用户可自行测试。
 
 ### 🌟 极致轻量与纯净架构 (Ultra-Lightweight & Clean)
 
@@ -55,14 +64,6 @@
      * `com.android.systemui`（系统界面）
      * `com.oplus.aod`（息屏）
    * 强行停止或重启“系统界面”与“息屏”，或直接重启手机即可生效。
-
----
-
-## 💡 技术说明：为什么 LSPosed 显示 legacy？
-
-本模块遵循经典的 Xposed 原生标准（通过 `assets/xposed_init` 入口加载，`xposedminversion <= 93`）。在 LSPosed 中，右上角会正确显示为蓝色的 **`legacy`** 标签：
-* 与知名经典模块（如 Scene、微博猪手等）完全一致；
-* `legacy` 是 Xposed 生态中兼容性最高、开销最小的工业级标准，LSPosed 核心引擎长期保持 100% 永久向后兼容。
 
 ---
 
