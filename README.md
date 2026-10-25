@@ -25,17 +25,17 @@
 
 ### 📱 兼容性与真机实测说明 (Compatibility)
 
-* **真机实测通过设备**：
-  * **OPPO Find X9 Ultra**（ColorOS 17）
-  * **OPPO Pad mini**（ColorOS 17）
-* **关于 ColorOS 15 与 16**：
-  * 作者仅在上述运行 ColorOS 17 的设备上进行了完整测试与验证；
-  * 从底层接口与方法签名来看，息屏显示（`com.oplus.aod`）和系统界面（`com.android.systemui`）的核心逻辑具有高度延续性，**理论上支持 ColorOS 15 与 ColorOS 16**，持有相关设备的用户可自行测试。
+* **系统版本支持**：
+  * **本项目仅适配 ColorOS 17**。不保证 ColorOS 16 及更早版本能够正常运行，请自测。
+* **真机实测通过设备（均运行 ColorOS 17）**：
+  * **OPPO Find X9 Ultra**
+  * **OPPO Pad mini**
+  * **一加 Ace 6 至尊版**
 
 ### 🌟 极致轻量与纯净架构 (Ultra-Lightweight & Clean)
 
-* ⚡ **体积骤降 93%**：由原版臃肿框架的 2.8 MB 极限精简至 **197 KB**。
-* 💎 **DEX 代码仅 4.8 KB**：彻底剔除冗余的第三方框架（YukiHookAPI）、Kotlin 运行库、AndroidX 界面库及多余类，仅保留 3 个纯原生 Xposed 钩子类。
+* ⚡ **体积骤降 93%**：由原版臃肿框架的 2.8 MB 极限精简至 **198 KB**。
+* 💎 **DEX 代码仅 6.4 KB**：彻底剔除冗余的第三方框架（YukiHookAPI）、Kotlin 运行库、AndroidX 界面库及多余类，仅保留 4 个纯原生 Xposed 钩子类。
 * ❌ **零后台常驻**：无前台界面、无桌面图标、无常驻 Service、无任何网络权限索取，系统息屏服务按需加载，性能损耗趋近于零。
 
 ---
@@ -58,7 +58,7 @@
    * 设备已解锁 Bootloader 并获取 Root 权限（Magisk / KernelSU / APatch）；
    * 已安装并激活 **LSPosed** 框架（推荐使用最新版 LSPosed）。
 2. **安装步骤**：
-   * 前往 [Releases](https://github.com/GloamingCity/ColorOS-AOD-Helper/releases) 下载最新的 `ColorOS_AOD_Helper_v1.0.apk` 并安装；
+   * 前往 [Releases](https://github.com/GloamingCity/ColorOS-AOD-Helper/releases) 下载最新的 `ColorOS_AOD_Helper_v1.1.apk` 并安装；
    * 打开 LSPosed 管理器，在模块列表中启用 **ColorOS AOD Helper**；
    * 勾选推荐作用域：
      * `com.android.systemui`（系统界面）

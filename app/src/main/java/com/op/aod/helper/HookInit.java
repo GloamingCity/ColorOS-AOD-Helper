@@ -2,7 +2,6 @@ package com.op.aod.helper;
 
 import android.view.MotionEvent;
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -25,6 +24,7 @@ public class HookInit implements IXposedHookLoadPackage {
     }
 
     private static void hookAod(ClassLoader classLoader) {
+        // 1. 外门锁：常亮显示设置卡片入口
         try {
             Class<?> clazz = XposedHelpers.findClass("com.oplus.aod.util.SettingsUtils", classLoader);
             for (Method m : clazz.getDeclaredMethods()) {
@@ -35,12 +35,40 @@ public class HookInit implements IXposedHookLoadPackage {
         } catch (Throwable t) {
             XposedBridge.log(t);
         }
+
+        // 2. 内门锁：破除天玑机型隐藏全天常亮模式列表
+        try {
+            XposedHelpers.findAndHookMethod(
+                "com.oplus.content.OplusFeatureConfigManager",
+                classLoader,
+                "hasFeature",
+                String.class,
+                new FeatureConfigHook()
+            );
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
     }
 
     private static void hookSystemUi(ClassLoader classLoader) {
-        // 1. 全景息屏常亮支持注入
+        SmoothTransitionHook transitionHook = new SmoothTransitionHook(classLoader);
+
+        // 1. 屏幕底层 Panel Feature 补齐（2:平滑过渡, 4:全景, 8:全天常亮）
         try {
-            SmoothTransitionHook transitionHook = new SmoothTransitionHook();
+            XposedHelpers.findAndHookMethod(
+                "com.oplus.systemui.aod.display.SmoothTransitionController",
+                classLoader,
+                "getDisplayPanelFeature",
+                int.class,
+                int[].class,
+                transitionHook
+            );
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+
+        // 2. 全景息屏常亮初始化与远端激活
+        try {
             XposedHelpers.findAndHookMethod(
                 "com.oplus.systemui.aod.display.SmoothTransitionController",
                 classLoader,
@@ -53,11 +81,42 @@ public class HookInit implements IXposedHookLoadPackage {
                 "setPanoramicSupportedByRemote",
                 transitionHook
             );
+            XposedHelpers.findAndHookMethod(
+                "com.oplus.systemui.aod.display.SmoothTransitionController",
+                classLoader,
+                "setPanoramicSupportAllDayForApplication",
+                boolean.class,
+                transitionHook
+            );
         } catch (Throwable t) {
             XposedBridge.log(t);
         }
 
-        // 2. 规避全景息屏多余手势监听冲突
+        // 3. 规避全景息屏误判为节能状态
+        try {
+            XposedHelpers.findAndHookMethod(
+                "com.oplus.systemui.aod.display.AODDisplayUtil",
+                classLoader,
+                "isPanoramicProcessTypeInEnergySaveSituation",
+                transitionHook
+            );
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+
+        // 4. 灭屏闹钟智能防护（全天常亮模式下绝不黑屏）
+        try {
+            XposedHelpers.findAndHookMethod(
+                "com.oplus.systemui.aod.aodclock.off.AodUpdateManager",
+                classLoader,
+                "setHideAlarm",
+                transitionHook
+            );
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+
+        // 5. 规避全景息屏多余手势监听冲突
         try {
             XposedHelpers.findAndHookMethod(
                 "com.oplus.systemui.aod.scene.PanoramicAodGestureController",
@@ -69,7 +128,7 @@ public class HookInit implements IXposedHookLoadPackage {
             XposedBridge.log(t);
         }
 
-        // 3. 拦截双击息屏组件中的单次误触信号
+        // 6. 拦截双击息屏组件中的单次误触信号
         try {
             XposedHelpers.findAndHookMethod(
                 "com.oplus.systemui.keyguard.gesture.OplusDoubleClickSleep$OnDoubleClickListener",
@@ -82,21 +141,27 @@ public class HookInit implements IXposedHookLoadPackage {
             XposedBridge.log(t);
         }
 
-        // 4. 精准拦截息屏过渡期的锁屏前一秒误唤醒
+        // 7. 精准拦截息屏过渡期的锁屏前一秒误唤醒
         try {
-            WakeupScreenHelperHook wakeupHook = new WakeupScreenHelperHook();
+            WakeupScreenHelperHook wakeupHook = new WakeupScreenHelperHook(classLoader);
             XposedHelpers.findAndHookMethod(
-                "com.oplus.systemui.aod.WakeupScreenHelper",
+                "com.oplus.systemui.notification.interruption.wakeup.WakeupScreenHelper",
                 classLoader,
-                "getPreventScreenOnInSleep",
+                "powerOnScreen",
                 wakeupHook
             );
-            XposedHelpers.findAndHookMethod(
-                "com.oplus.systemui.aod.WakeupScreenHelper",
-                classLoader,
-                "preventScreenOn",
-                wakeupHook
-            );
+        } catch (Throwable t) {
+            XposedBridge.log(t);
+        }
+
+        // 8. 屏蔽全景息屏原生处理流程中的多余唤醒判定
+        try {
+            Class<?> clickSleepClass = XposedHelpers.findClass("com.oplus.systemui.keyguard.gesture.OplusDoubleClickSleep", classLoader);
+            for (Method m : clickSleepClass.getDeclaredMethods()) {
+                if (m.getName().contains("processPanoramicWakeup")) {
+                    XposedBridge.hookMethod(m, XC_MethodReplacement.returnConstant(Boolean.FALSE));
+                }
+            }
         } catch (Throwable t) {
             XposedBridge.log(t);
         }
