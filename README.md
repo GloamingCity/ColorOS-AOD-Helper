@@ -31,6 +31,7 @@
   * **OPPO Find X9 Ultra**
   * **OPPO Pad mini**
   * **一加 Ace 6 至尊版**
+  * **一加 16**
 
 ### 🌟 极致轻量与纯净架构 (Ultra-Lightweight & Clean)
 
@@ -58,7 +59,7 @@
    * 设备已解锁 Bootloader 并获取 Root 权限（Magisk / KernelSU / APatch）；
    * 已安装并激活 **LSPosed** 框架（推荐使用最新版 LSPosed）。
 2. **安装步骤**：
-   * 前往 [Releases](https://github.com/GloamingCity/ColorOS-AOD-Helper/releases) 下载最新的 `ColorOS_AOD_Helper_v1.1.apk` 并安装；
+   * 前往 [Releases](https://github.com/GloamingCity/ColorOS-AOD-Helper/releases) 下载最新的 `ColorOS_AOD_Helper_v1.2.apk` 并安装；
    * 打开 LSPosed 管理器，在模块列表中启用 **ColorOS AOD Helper**；
    * 勾选推荐作用域：
      * `com.android.systemui`（系统界面）

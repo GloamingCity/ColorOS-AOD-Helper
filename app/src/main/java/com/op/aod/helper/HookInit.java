@@ -116,14 +116,14 @@ public class HookInit implements IXposedHookLoadPackage {
             XposedBridge.log(t);
         }
 
-        // 5. 规避全景息屏多余手势监听冲突
+        // 5. 规避全景息屏多余手势监听冲突（兼容无参及带参重载，防止一加16等新机型触控IC被切入单点模式）
         try {
-            XposedHelpers.findAndHookMethod(
-                "com.oplus.systemui.aod.scene.PanoramicAodGestureController",
-                classLoader,
-                "registerPanoramicAodGestureMonitor",
-                XC_MethodReplacement.DO_NOTHING
-            );
+            Class<?> gestureControllerClass = XposedHelpers.findClass("com.oplus.systemui.aod.scene.PanoramicAodGestureController", classLoader);
+            for (Method m : gestureControllerClass.getDeclaredMethods()) {
+                if ("registerPanoramicAodGestureMonitor".equals(m.getName())) {
+                    XposedBridge.hookMethod(m, XC_MethodReplacement.DO_NOTHING);
+                }
+            }
         } catch (Throwable t) {
             XposedBridge.log(t);
         }
