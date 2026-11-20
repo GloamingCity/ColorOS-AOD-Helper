@@ -78,7 +78,13 @@ public class SmoothTransitionHook extends XC_MethodHook {
             return;
         }
 
-        // initSmoothTransitionState 或 setPanoramicSupportedByRemote
+        // 仅在 initSmoothTransitionState 或 setPanoramicSupportedByRemote 执行后补齐状态并同步，
+        // 避免 setPanoramicSupportAllDayForApplication 自递归爆栈及 setHideAlarm 无效反射损耗。
+        if (!"initSmoothTransitionState".equals(methodName)
+                && !"setPanoramicSupportedByRemote".equals(methodName)) {
+            return;
+        }
+
         Object obj = param.thisObject;
         if (obj == null) return;
 
