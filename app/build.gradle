@@ -10,8 +10,8 @@ android {
         applicationId "com.op.aod.helper"
         minSdk 33
         targetSdk 37
-        versionCode 12
-        versionName "1.2"
+        versionCode 13
+        versionName "1.3"
     }
 
     buildTypes {
